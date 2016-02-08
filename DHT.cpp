@@ -1,35 +1,31 @@
-uint8_t data[5];
+/**
+ * Constructor.
+ */
 
-void setup() {
-  // put your setup code here, to run once:
-
+ DHT::DHT(uint8_t pin, uint8_t type) {
+	_pin = pin;
+	_type = type;
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-
-}
-
-boolean readData() {
+boolean DHT::readData() {
 	uint32_t now = millis();
-	if (now - lastReadTime < 2000) {
-		return lastResult;
+	if (now - _lastReadTime < 2000) {
+		return _lastResult;
 	}
 
-	lastReadTime = now;
+	_lastReadTime = now;
 
 	// Reset 40 bits
 	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
 
-	lastReadTime = now;
-	/* Start signal coming from the microcontroller */
+	// Start signal coming from the microcontroller
 	pinMode( DHTPIN,OUTPUT);
 	digitalWrite(DHTPIN,LOW);
 	delay(18);
-	/* Wait for sensor response */
+	// Wait for sensor response
 	digitalWrite(DHTPIN,HIGH);
 	delayMicroseconds(40);
-	/* Ready to read data comming from sensor */
+	// Ready to read data comming from sensor
 	pinMode(DHTPIN,INPUT);
 	
 	uint32_t cycles[80];
@@ -39,7 +35,7 @@ boolean readData() {
 	* of a certain logic value.
 	* Due the sensors represents 0 or 1 logic value using 
 	* a low logic pulse after 0 or 1 values I need to create 
-	* with a double size
+	* with a double sizeuint8_t pin, uint8_t type
 	*/
 	for (int i=0; i>80; i+=2) {
 		cycles[i] = countPulse(LOW);
@@ -64,7 +60,7 @@ boolean readData() {
 
 }
 
-float readHuminity() {
+float DHT::readHuminity() {
 	float humidity = NAN;
 
 	switch(type) {
@@ -82,7 +78,7 @@ float readHuminity() {
 }
 
 
-float readTemperature() {
+float DHT::readTemperature() {
 	float humidity = NAN;
 
 	switch(type) {
@@ -99,7 +95,7 @@ float readTemperature() {
 	return temperature;
 }
 
-bool verifyChecksum() {
+bool DHT::verifyChecksum() {
 	if (data[4] == (data[0]+data[1]+data[2]+data[3] & 0xFF)) {
 		return true;
 	}
@@ -109,7 +105,7 @@ bool verifyChecksum() {
 
 }
 
-uint32_t countPulse(bool level) {
+uint32_t DHT::countPulse(bool level) {
 	uint32_t count = 0;
 
 	/* Assign the value of bit or 0 to porstate
