@@ -81,41 +81,6 @@ boolean DHT::readData() {
 
 }
 
-float DHT::readHuminity() {
-	float humidity = NAN;
-
-	switch(type) {
-		case DTH11: 
-			humidity = data[0];
-			break;
-		case DTH22:
-			humidity = data[0];
-			humidity *= 256;
-			humidity += data[1];
-			humidity *= 0.1;
-			break;
-	}
-	return humidity;
-}
-
-
-float DHT::readTemperature() {
-	float humidity = NAN;
-
-	switch(type) {
-		case DTH11: 
-			temperature = data[2];
-			break;
-		case DTH22:
-			temperature = data[2];
-			temperature *= 256;
-			temperature += data[3];
-			temperature *= 0.1;
-			break;
-	}
-	return temperature;
-}
-
 bool DHT::verifyChecksum() {
 	if (data[4] == (data[0]+data[1]+data[2]+data[3] & 0xFF)) {
 		_lastResult = true;
@@ -143,3 +108,43 @@ uint32_t DHT::countPulse(bool level) {
 	}
 	return count;
 }  
+
+
+float DHT::readHuminity() {
+	float humidity = NAN;
+	if (readData()) {
+		switch(type) {
+			case DTH11: 
+				humidity = data[0];
+				break;
+			case DTH22:
+				humidity = data[0];
+				humidity *= 256;
+				humidity += data[1];
+				humidity *= 0.1;
+				break;
+		}
+	}
+	return humidity;
+}
+
+
+float DHT::readTemperature() {
+	float temperature = NAN;
+
+	if (readData()) {
+		switch(type) {
+			case DTH11: 
+				temperature = data[2];
+				break;
+			case DTH22:
+				temperature = data[2];
+				temperature *= 256;
+				temperature += data[3];
+				temperature *= 0.1;
+				break;
+		}
+	}
+	return temperature;
+}
+
