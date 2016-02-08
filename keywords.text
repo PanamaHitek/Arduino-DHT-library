@@ -1,0 +1,21 @@
+#######################################
+# Syntax Coloring Map for Arduino DHT-library
+#######################################
+
+#######################################
+# KEYWORD1 Classes, datatypes, and C++ keywords
+#######################################
+DHT	KEYWORD1
+ 
+#######################################
+# KEYWORD2 Methods and functions
+#######################################
+
+# Functions for manipulating the DHT sensor
+countPulse KEYWORD2
+verifyChecksum KEYWORD2
+
+# Functions to read data
+readTemperature KEYWORD2
+readHumidity KEYWORD2
+readData KEYWORD2
