@@ -1,3 +1,5 @@
+#include "DHT.h"
+
 /**
  * Constructor.
  */
@@ -98,7 +100,7 @@ uint32_t DHT::countPulse(bool level) {
 	 * depending of level. If level = 0, then should be 0
 	 * If level = 1, then should be bit
 	 */
-	uint8_t portState = level ? bit : 0;
+	uint8_t portState = level ? _bit : 0;
 
 	while ((*portInputRegister(_port) & _bit) == portState) {
 		if (count++ >= _maxCycles) {
@@ -110,14 +112,14 @@ uint32_t DHT::countPulse(bool level) {
 }  
 
 
-float DHT::readHuminity() {
+float DHT::readHumidity() {
 	float humidity = NAN;
 	if (readData()) {
-		switch(type) {
-			case DTH11: 
+		switch(_type) {
+			case DHT11: 
 				humidity = data[0];
 				break;
-			case DTH22:
+			case DHT22:
 				humidity = data[0];
 				humidity *= 256;
 				humidity += data[1];
@@ -133,11 +135,11 @@ float DHT::readTemperature() {
 	float temperature = NAN;
 
 	if (readData()) {
-		switch(type) {
-			case DTH11: 
+		switch(_type) {
+			case DHT11: 
 				temperature = data[2];
 				break;
-			case DTH22:
+			case DHT22:
 				temperature = data[2];
 				temperature *= 256;
 				temperature += data[3];

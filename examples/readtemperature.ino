@@ -4,24 +4,25 @@
 #define model DHT11
 
 // Instance object
-DTH dht(pin,model);
+DHT dht(pin,model);
 
 void setup() {
-	Serial.begin(9600);
+  Serial.begin(9600);
 }
 
 void loop() {
-	// Wait few seconds
-	delay(2000);
+  // Wait few seconds
+  delay(2000);
 
-	float T = dht.readTemperature();
+  float T = dht.readTemperature();
 
-	if (isnan(T)) {
-		Serial.println(F("Something goes wrong... =("));
-		return;
-	}
+  if (isnan(T)) {
+    Serial.println(F("Something goes wrong... =("));
+    return;
+  }
 
-	Serial.print(F("Temperature: "));
-	Serial.print(T);
-	Serial.print(F(" *C" ));
+  Serial.print(F("Temperature: "));
+  Serial.print(T);
+  Serial.print(F(" *C" ));
+  Serial.println();
 }

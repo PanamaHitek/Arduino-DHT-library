@@ -9,6 +9,10 @@ https://github.com/adafruit/DHT-sensor-library
 
 */
 
+#ifndef DHT_H
+#define DHT_H
+
+
 // Include library depending of Arduino IDE version
 #if ARDUINO >= 100
  #include "Arduino.h"
@@ -21,27 +25,30 @@ https://github.com/adafruit/DHT-sensor-library
 #define DHT22 22
 
 class DHT {
-	// Store data comming from the sensor
-	uint8_t data[5];
+	private:
+		// Store data comming from the sensor
+		uint8_t data[5];
 
-	/* Define the pin where the sensor is connected
-	* and sensor type
-	*/
-	uint8_t _pin, _type;
+		/* Define the pin where the sensor is connected
+		* and sensor type
+		*/
+		uint8_t _pin, _type;
 
-	// Keep track of the bit and port
-	uint8_t _bit, _port;
-	uint32_t _lastReadTime, _maxCycles;
+		// Keep track of the bit and port
+		uint8_t _bit, _port;
+		uint32_t _lastReadTime, _maxCycles;
 
-	bool _lastResult;
+		bool _lastResult;
 
-	uint32_t countPulse(bool level);
-	bool verifyChecksum();
+		uint32_t countPulse(bool level);
+		bool verifyChecksum();
 
 	public:
 		DHT(uint8_t pin, uint8_t type);
-		float readTemperate();
-		float readHuminidity();
+		float readTemperature();
+		float readHumidity();
 		boolean readData();
 
-}
+};
+
+#endif
