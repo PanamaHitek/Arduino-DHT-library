@@ -45,6 +45,7 @@ class DHT {
 
 	public:
 		DHT(uint8_t pin, uint8_t type);
+		void init();
 		float readTemperature();
 		float readHumidity();
 		boolean readData();

@@ -8,6 +8,7 @@ DHT dht(pin,model);
 
 void setup() {
   Serial.begin(9600);
+  dht.init();
 }
 
 void loop() {

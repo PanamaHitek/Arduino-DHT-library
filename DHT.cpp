@@ -9,9 +9,9 @@
 	_type = type;
 
 	// Return bitmask of specified pin
-    _bit = digitalPinToBitMask(pin);
+    _bit = digitalPinToBitMask(_pin);
     // Return port of specified pin
-    _port = digitalPinToPort(pin);
+    _port = digitalPinToPort(_pin);
 
 
 	/* Define 1 ms as timeout to read data from sensor
@@ -19,6 +19,11 @@
 	*/
 	_maxCycles = microsecondsToClockCycles(1000);
 
+}
+
+
+void DHT::init() {
+  	pinMode(_pin, INPUT_PULLUP);
 	/*
 	* Ensure that the first time millis() - lastReadTime will be
 	* greather than 2 ms
@@ -30,7 +35,7 @@ boolean DHT::readData() {
 
 	// Time elapsed since sketch start
 	uint32_t now = millis();
-	if (now - _lastReadTime < 2000) {
+	if ((now - _lastReadTime) < 2000) {
 		return _lastResult;
 	}
 
@@ -39,15 +44,21 @@ boolean DHT::readData() {
 	// Reset 40 bits
 	data[0] = data[1] = data[2] = data[3] = data[4] = 0;
 
+
+	digitalWrite(_pin, HIGH);
+	delay(250);
+
 	// Start signal coming from the microcontroller
 	pinMode(_pin,OUTPUT);
 	digitalWrite(_pin,LOW);
-	delay(18);
+	delay(20);
 	// Wait for sensor response
 	digitalWrite(_pin,HIGH);
 	delayMicroseconds(40);
 	// Ready to read data comming from sensor
-	pinMode(_pin,INPUT);
+	pinMode(_pin,INPUT_PULLUP);
+	// Delay a bit to let sensor pull data line low
+	delayMicroseconds(10);
 	
 
 	/* 
@@ -78,8 +89,14 @@ boolean DHT::readData() {
 	    }
 	}
 
-	return verifyChecksum();
-
+	//return verifyChecksum();
+	if (data[4] == (data[0]+data[1]+data[2]+data[3] & 0xFF)) {
+		_lastResult = true;
+	}
+	else {
+		_lastResult = false;
+	}
+	return _lastResult;
 
 }
 
@@ -105,7 +122,7 @@ uint32_t DHT::countPulse(bool level) {
 	while ((*portInputRegister(_port) & _bit) == portState) {
 		if (count++ >= _maxCycles) {
 			// Exceeded timeout, fail.
-			return 0;
+			return 0; 
 		}
 	}
 	return count;

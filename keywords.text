@@ -12,6 +12,7 @@ DHT	KEYWORD1
 #######################################
 
 # Functions to read data
+init KEYWORD2
 readTemperature KEYWORD2
 readHumidity KEYWORD2
 readData KEYWORD2
